@@ -29,6 +29,22 @@ class ProfileGithub extends Component {
       .catch(err => console.log(err));
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.username !== this.props.username) {
+      const { username } = this.props;
+      const { count, sort, clientId, clientSecret } = this.state;
+
+      fetch(
+        `https://api.github.com/users/${username}/repos?per_page=${count}&sort=${sort}&client_id=${clientId}&client_secret=${clientSecret}`
+      )
+        .then(res => res.json())
+        .then(data => {
+          this.setState({ repos: data });
+        })
+        .catch(err => console.log(err));
+    }
+  }
+
   render() {
     const { repos } = this.state;
 
